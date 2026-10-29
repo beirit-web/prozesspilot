@@ -41,8 +41,23 @@ def email_analysieren(email):
         return "Allgemein"
 
 
-for nummer, email in enumerate(emails, start=1):
+# ID-Vergabe
+ids = []
+for email in emails:
+    if 'id' in email:
+        ids.append(email.get('id'))
+print(ids)
+
+naechste_id = max(ids) + 1
+
+for email in emails:
     if "id" not in email:
-        email['id'] = nummer
+        email['id'] = naechste_id
+        naechste_id += 1
+        email['kategorie'] = email_analysieren(email)
+        print(email)
+        print('------------')
     print(
-        f"Email {email.get('id', nummer)} Betreff {email_analysieren(email)}")
+        f"Email {email.get('id', naechste_id)} Betreff {email_analysieren(email)}")
+
+# ID-Vergabe mit E-Mail-Klassifizierung
