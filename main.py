@@ -1,3 +1,4 @@
+
 emails = [
     {
         "id": 1,
@@ -18,26 +19,34 @@ emails = [
     },
 ]
 
-deine_email = input("Deine E-Mail: ")
-betreff_eingabe = input("Betreff: ")
-inhalt = input("Inhalt: ")
+deine_email = input("Deine E-Mail: ").strip()
+betreff_eingabe = input("Betreff: ").strip()
+inhalt = input("Inhalt: ").strip()
 
 print("---------")
+
 ids = []
 
-for vorhandene_ids in emails:
-    ids.append(vorhandene_ids["id"])
+for vorhandene_email in emails:
+    ids.append(vorhandene_email["id"])
 
-if ids == []:
-    hinzugefuegte_id = 1
-    print("Postfach ist noch leer")
-    print("---------")
-else:
-    hinzugefuegte_id = max(ids) + 1
-    print("Zulezt hinzugefügte ID:", hinzugefuegte_id)
+
+def naechste_id(ids):
+    if ids == []:
+        neue_id = 1
+    else:
+        neue_id = max(ids) + 1
+
+    return neue_id
+
+
+neue_id = naechste_id(ids)
+
+print(f"Neue ID: {neue_id}")
+print("---------")
 
 email_inhalt = {
-    "id": hinzugefuegte_id,
+    "id": neue_id,
     "deine_email": deine_email,
     "betreff": betreff_eingabe,
     "inhalt": inhalt,
@@ -46,22 +55,40 @@ email_inhalt = {
 
 def felder_ausfuehlen(werte):
     for k, v in werte.items():
-        while not werte[k] or (k == "deine_email" and not '@' in werte[k]):
+
+        # Leerzeichen bei Strings entfernen
+        if isinstance(werte[k], str):
+            werte[k] = werte[k].strip()
+
+        # Eingaben überprüfen
+        while not werte[k] or (
+            k == "deine_email" and "@" not in werte[k]
+        ):
             if not werte[k]:
-                werte[k] = input(f"{k} bitte erneut eingeben: ")
+                werte[k] = input(
+                    f"{k} bitte erneut eingeben, es fehlt: "
+                ).strip()
             else:
-                werte[k] = input(f"{k} erneut eingeben: ")
-        return True
+                werte[k] = input(
+                    f"{k} erneut mit '@' eingeben: "
+                ).strip()
+
+    return True
 
 
-if felder_ausfuehlen(email_inhalt):
-    emails.append(email_inhalt)
-    ids.append(email_inhalt["id"])
+def email_speichern(email):
+    if felder_ausfuehlen(email):
+        emails.append(email)
+        ids.append(email["id"])
+
     if len(emails) == 1:
-        print(f"Postfach: {len(emails)} E-Mail")
-    elif len(emails) > 1:
-        print(f"Postfach: {len(emails)} E-Mails")
+        print(f"Im Postfach ist: {len(emails)} E-Mail")
+    else:
+        print(f"Im Postfach sind: {len(emails)} E-Mails")
 
-print("---------")
-print("Alle ID's:", ids)
-print("Nächste ID:", hinzugefuegte_id)
+
+email_speichern(email_inhalt)
+
+print("Alle IDs:", ids)
+print("Betreff:", email_inhalt["betreff"])
+print("Hinzugefügte ID:", email_inhalt["id"])
