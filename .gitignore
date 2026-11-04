@@ -1,2 +1,6 @@
 Plan.txt
 test.py
+.venv
+.env
+__pycache__/
+send_mail.py
