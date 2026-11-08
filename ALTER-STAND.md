@@ -1,6 +1,6 @@
 # ProzessPilot – aktueller Projektstand
 
-**Stand: 8. November 2026**
+## Stand: 8. November 2026\*\*
 
 Dieses Dokument beschreibt den tatsächlich vorhandenen lokalen Projektstand und erklärt die derzeitige Ordnerstruktur. Es ergänzt die [README.md](README.md), die überwiegend die geplante Entwicklung beschreibt. Die unten genannten Verbesserungen sind Empfehlungen und noch nicht umgesetzt.
 
@@ -10,16 +10,16 @@ ProzessPilot ist ein Python-Lernprojekt zur schrittweisen Automatisierung von Ge
 
 Im Arbeitsverzeichnis liegen zusätzlich ein eigenständiger TicketManager, ein lokales SMTP-Versandskript und Übungsdateien. Zwischen E-Mail-Erfassung, TicketManager und Versand gibt es derzeit keine programmatische Verbindung.
 
-| Bereich | Aktueller Stand |
-| --- | --- |
-| E-Mail-Erfassung | Interaktive Eingabe von Adresse, Betreff und Inhalt |
-| E-Mail-Validierung | Prüfung von Pflichtfeldern, ID, Textwerten und Vorhandensein eines `@` |
-| ID-Vergabe | Höchste vorhandene ID plus eins; Start bei eins für eine leere Liste |
-| Speicherung | E-Mails und Tickets bleiben nur während der Ausführung im Arbeitsspeicher |
-| TicketManager | Tickets erstellen, filtern, abschließen, prüfen und statistisch auswerten |
-| E-Mail-Versand | Separates lokales SMTP-Skript mit Gmail-Anbindung |
-| Automatisierte Tests | Keine Testsuite vorhanden |
-| API, Weboberfläche und KI | Noch nicht implementiert |
+| Bereich                   | Aktueller Stand                                                           |
+| ------------------------- | ------------------------------------------------------------------------- |
+| E-Mail-Erfassung          | Interaktive Eingabe von Adresse, Betreff und Inhalt                       |
+| E-Mail-Validierung        | Prüfung von Pflichtfeldern, ID, Textwerten und Vorhandensein eines `@`    |
+| ID-Vergabe                | Höchste vorhandene ID plus eins; Start bei eins für eine leere Liste      |
+| Speicherung               | E-Mails und Tickets bleiben nur während der Ausführung im Arbeitsspeicher |
+| TicketManager             | Tickets erstellen, filtern, abschließen, prüfen und statistisch auswerten |
+| E-Mail-Versand            | Separates lokales SMTP-Skript mit Gmail-Anbindung                         |
+| Automatisierte Tests      | Keine Testsuite vorhanden                                                 |
+| API, Weboberfläche und KI | Noch nicht implementiert                                                  |
 
 ## 2. Derzeitige Projektstruktur
 
@@ -27,7 +27,7 @@ Der folgende Baum zeigt die wesentlichen lokalen Dateien. Git-Inhalte, installie
 
 ```text
 ProzessPilot/
-├── AKt-Stand-README.md             # Diese Bestandsaufnahme
+├── ALTER-STAND.md                 # Diese Bestandsaufnahme
 ├── README.md                      # Projektidee und geplante Entwicklung
 ├── LICENSE                        # Lizenz des Hauptprojekts
 ├── Plan.txt                       # Lokale Roadmap, von Git ignoriert
@@ -46,8 +46,7 @@ ProzessPilot/
 │       └── architektur.svg        # Darstellung der geplanten Architektur
 ├── daten/
 │   └── emails.json                # Enthält derzeit eine leere Liste: []
-└── ticket-manager/                # Eigenständiges, verschachteltes Git-Repository
-    ├── .git/                      # Eigene Git-Verwaltung des TicketManagers
+└── ticket-manager/                # Normaler Unterordner im Hauptrepository
     ├── .gitignore                 # Ignoriert die lokale Datei .task.py
     ├── .task.py                   # Lokale, derzeit leere Datei
     ├── README.md                  # Beschreibung des TicketManagers
@@ -84,13 +83,13 @@ Unter `assets/svg/` liegen Dokumentationsgrafiken. Die Architekturgrafik beschre
 
 [ticket-manager/ticket.manager.py](ticket-manager/ticket.manager.py) ist eine separate Konsolenanwendung mit einer eigenen Liste `tickets`.
 
-| Funktion | Aufgabe |
-| --- | --- |
-| `kritische_tickets()` | Offene Tickets mit hoher Priorität auswählen |
-| `ticket_abschliessen()` | Ein Ticket anhand seiner ID suchen und von `offen` auf `erledigt` setzen |
-| `ticket_statistik()` | Gesamtzahl, offene und erledigte Tickets, hohe Priorität sowie fehlenden Status zählen |
-| `ticket_validieren()` | Vorhandensein der Schlüssel `id`, `titel` und `status` prüfen |
-| `ticket_erstellen()` | Eine ID vergeben und ein neues Ticket mit Status `offen` hinzufügen |
+| Funktion                | Aufgabe                                                                                |
+| ----------------------- | -------------------------------------------------------------------------------------- |
+| `kritische_tickets()`   | Offene Tickets mit hoher Priorität auswählen                                           |
+| `ticket_abschliessen()` | Ein Ticket anhand seiner ID suchen und von `offen` auf `erledigt` setzen               |
+| `ticket_statistik()`    | Gesamtzahl, offene und erledigte Tickets, hohe Priorität sowie fehlenden Status zählen |
+| `ticket_validieren()`   | Vorhandensein der Schlüssel `id`, `titel` und `status` prüfen                          |
+| `ticket_erstellen()`    | Eine ID vergeben und ein neues Ticket mit Status `offen` hinzufügen                    |
 
 Beim Start werden zwei Beispieltickets erstellt, eines abgeschlossen und Statistik sowie Validierungsergebnisse ausgegeben. Eine interaktive Menüführung oder dauerhafte Speicherung gibt es noch nicht. Die Funktion zum Filtern kritischer Tickets ist vorhanden, wird im Beispielablauf aber nicht aufgerufen.
 
@@ -126,13 +125,15 @@ Eine `pyproject.toml` oder `requirements.txt` zur Deklaration von Python-Version
 
 ## 4. Git-Struktur und Dokumentationsstand
 
-Diese Angaben sind eine Momentaufnahme zum oben genannten Datum:
+Diese Angaben sind eine Momentaufnahme zum oben genannten Datum. Der Git-Abschnitt wurde nach der Zusammenführung in ein gemeinsames Repository aktualisiert:
 
 - Das Hauptrepository versioniert unter anderem `main.py`, `README.md`, die Grafiken und `daten/emails.json`.
 - Die Haupt-`.gitignore` schließt `Plan.txt`, `test.py`, `send_mail.py`, `.venv`, `.env` und `__pycache__/` aus.
 - `__pycache__/main.cpython-313.pyc` wird trotzdem bereits von Git verfolgt. Eine Ignore-Regel entfernt zuvor aufgenommene Dateien nicht aus dem Git-Index.
-- `ticket-manager/` hat ein eigenes `.git`-Verzeichnis. Im Hauptrepository erscheint der Ordner als unversioniert; er ist dort nicht als Submodul eingerichtet.
-- Im TicketManager-Repository wird die zuvor versionierte `main.py` als lokal gelöscht angezeigt, während `ticket.manager.py` unversioniert ist. Die Änderung des Skriptpfads ist dort noch nicht als Commit festgehalten.
+- Nur das Hauptverzeichnis besitzt eine aktive `.git`-Verwaltung. `ticket-manager/` ist jetzt ein normaler Unterordner desselben Repositorys.
+- Der bisherige Git-Verweis auf den TicketManager wurde im Index durch seine tatsächlichen Dateien ersetzt. Diese Umstellung ist für den nächsten Commit vorgemerkt; es wurde noch kein Commit erstellt.
+- Die bisherige Git-Historie des TicketManagers und eine Kopie des Hauptindex vor der Umstellung liegen lokal unter `.git/backups/ticket-manager-0641f3540d78/`. Diese Sicherung wird nicht mitgeklont oder gepusht. Die Historie wurde nicht in die Commit-Historie des Hauptrepositorys importiert.
+- Die Datei `ticket-manager/.gitignore` bleibt gültig und schließt weiterhin `.task.py` aus. Eine eigene `.gitignore` erzeugt kein separates Repository.
 - Die Haupt-README beschreibt die Anwendung noch als nicht ausführbar, obwohl die interaktive E-Mail-Erfassung bereits vorhanden ist.
 - Die TicketManager-README nennt noch `python main.py`; zum aktuellen lokalen Dateinamen passt der Startbefehl aus Abschnitt 3.
 - `Plan.txt` verwendet noch den Projektnamen „MailFlow AI“ und führt bereits teilweise erledigte Schritte als offen. Die Datei ist in der Haupt-README verlinkt, wird aber nicht versioniert.
@@ -158,7 +159,7 @@ Die vorhandene Anwendung kann schrittweise verbessert werden:
 3. Konsoleneingaben, Fachlogik und Speicherung in kleine Module trennen.
 4. JSON laden und speichern sowie Fehlerfälle bei der Dateiverarbeitung behandeln.
 5. Git-Regeln, Dateinamen und Dokumentation mit dem tatsächlichen Stand abstimmen.
-6. Entscheiden, ob der TicketManager eigenständig bleibt oder fachlich in ProzessPilot integriert wird.
+6. Entscheiden, ob der TicketManager auch fachlich mit der E-Mail-Verarbeitung verbunden wird. Die gemeinsame Git-Verwaltung ist bereits eingerichtet.
 7. Python-Version und Abhängigkeiten deklarieren und anschließend automatisierte Prüfungen ergänzen.
 
 Für den aktuellen Umfang genügt eine Anwendung mit klar getrennten Python-Modulen. API, Datenbank und mögliche Microservices können folgen, sobald der grundlegende Ablauf zuverlässig funktioniert.
