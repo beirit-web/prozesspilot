@@ -59,6 +59,21 @@ def email_adresse_validieren(email):
     return False
 
 
+class Email:
+    def __init__(self, id, deine_email_adr,  betreff, inhalt):
+        self.id = id
+        self.deine_email_adr = deine_email_adr
+        self.betreff = betreff
+        self.inhalt = inhalt
+
+    def email_info(self):
+        return f"ID: {self.id} Deine Adrese: {self.deine_email_adr}, Betreff: {self.betreff} Inhalt: {self.inhalt}"
+
+
+email1 = Email(1, "test@example.de", "Testbetreff", "Meine erste E-Mail",)
+print(email1.email_info())
+
+
 def email_validieren(email):
 
     # Prüfen, ob alle Schlüssel vorhanden sind
