@@ -1,22 +1,5 @@
-emails = [
-    {
-        "id": 1,
-        "deine_email_adr": "example@email.de",
-        "betreff": "Test",
-        "inhalt": "Hallo ich bin 1",
-    },
-    {
-        "id": 2,
-        "deine_email_adr": "example@email.de",
-        "betreff": "Test",
-        "inhalt": "Hallo ich bin 2",
-    },
-    {
-        "id": 3,
-        "betreff": "Test",
-        "inhalt": "Hallo ich bin 3",
-    },
-]
+from email_model import Email
+from email_data import emails
 
 
 def naechste_id(ids):
@@ -28,30 +11,18 @@ def naechste_id(ids):
     return neue_id
 
 
-def felder_ausfuehlen(werte):
-    for k, v in werte.items():
+def felder_ausfuehlen(email):
+    email.betreff = email.betreff.strip()
+    email.inhalt = email.inhalt.strip()
 
-        if isinstance(v, str):
-            werte[k] = v.strip()
-
-        while not werte[k] or (
-            k == "deine_email_adr"
-            and "@" not in werte[k]
-        ):
-            if not werte[k]:
-                werte[k] = input(
-                    f"{k} erneut eingeben: "
-                ).strip()
-            else:
-                werte[k] = input(
-                    f"{k}: @-Zeichen fehlt: "
-                ).strip()
-
-    return True
+    while not email.betreff:
+        email.betreff = input("Betreff fehlt: ").strip()
+    while not email.inhalt:
+        email.inhalt = input("Inhalt fehlt: ").strip()
 
 
 def email_adresse_validieren(email):
-    adresse = email.get("deine_email_adr")
+    adresse = email.deine_email_adr
 
     if isinstance(adresse, str) and "@" in adresse:
         return True
@@ -59,52 +30,21 @@ def email_adresse_validieren(email):
     return False
 
 
-class Email:
-    def __init__(self, id, deine_email_adr,  betreff, inhalt):
-        self.id = id
-        self.deine_email_adr = deine_email_adr
-        self.betreff = betreff
-        self.inhalt = inhalt
-
-    def email_info(self):
-        return f"ID: {self.id} Deine Adrese: {self.deine_email_adr}, Betreff: {self.betreff} Inhalt: {self.inhalt}"
-
-
-email1 = Email(1, "test@example.de", "Testbetreff", "Meine erste E-Mail",)
-print(email1.email_info())
-
-
 def email_validieren(email):
 
-    # Prüfen, ob alle Schlüssel vorhanden sind
     if (
-        "id" in email
-        and "deine_email_adr" in email
-        and "betreff" in email
-        and "inhalt" in email
+        type(email.id) is int
+        and email.id >= 1
     ):
 
-        # ID überprüfen
-        if (
-            type(email["id"]) is int
-            and email["id"] >= 1
-        ):
+        # E-Mail-Adresse überprüfen
+        if email_adresse_validieren(email):
 
-            # E-Mail-Adresse überprüfen
-            if email_adresse_validieren(email):
-
-                # Betreff überprüfen
-                if (
-                    isinstance(email.get("betreff"), str)
-                    and email.get("betreff").strip()
-                ):
-
-                    # Inhalt überprüfen
-                    if (
-                        isinstance(email.get("inhalt"), str)
-                        and email.get("inhalt").strip()
-                    ):
-                        return True
+            if (
+                    isinstance(email.betreff,
+                               str) and email.betreff.strip()
+                    and isinstance(email.inhalt, str) and email.inhalt.strip()):
+                return True
 
     return False
 
@@ -133,16 +73,11 @@ print("---------")
 ids = []
 
 for vorhandene_email in emails:
-    ids.append(vorhandene_email["id"])
+    ids.append(vorhandene_email.id)
 
 neue_id = naechste_id(ids)
 
-email_inhalt = {
-    "id": neue_id,
-    "deine_email_adr": deine_email_adr,
-    "betreff": betreff_eingabe,
-    "inhalt": inhalt,
-}
+email_inhalt = Email(neue_id, deine_email_adr, betreff_eingabe, inhalt)
 
 # Eingaben überprüfen und gegebenenfalls korrigieren
 felder_ausfuehlen(email_inhalt)
@@ -151,10 +86,14 @@ felder_ausfuehlen(email_inhalt)
 email_speichern(email_inhalt)
 
 print("---------")
-print("Alle IDs:", [email["id"] for email in emails])
-print("Betreff:", email_inhalt["betreff"])
-print("Hinzugefügte ID:", email_inhalt["id"])
+print("Alle IDs:", [email.id for email in emails])
+print("Betreff:", email_inhalt.betreff)
+print("Hinzugefügte ID:", email_inhalt.id)
 
 print("---------")
 print("Neue E-Mail gültig:", email_validieren(email_inhalt))
-print("Dritte E-Mail gültig:", email_validieren(emails[2]))
+print("Anzahl E-Mails:", len(emails))
+if len(emails) == 3:
+    print("Dritte E-Mail gültig:", email_validieren(emails[2]))
+else:
+    print("Dritte E-Mail gibt's nicht")
