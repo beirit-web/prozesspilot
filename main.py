@@ -17,6 +17,7 @@ def felder_ausfuehlen(email):
 
     while not email.betreff:
         email.betreff = input("Betreff fehlt: ").strip()
+
     while not email.inhalt:
         email.inhalt = input("Inhalt fehlt: ").strip()
 
@@ -31,26 +32,20 @@ def email_adresse_validieren(email):
 
 
 def email_validieren(email):
-
-    if (
-        type(email.id) is int
-        and email.id >= 1
-    ):
-
-        # E-Mail-Adresse überprüfen
+    if type(email.id) is int and email.id >= 1:
         if email_adresse_validieren(email):
-
             if (
-                    isinstance(email.betreff,
-                               str) and email.betreff.strip()
-                    and isinstance(email.inhalt, str) and email.inhalt.strip()):
+                isinstance(email.betreff, str)
+                and email.betreff.strip()
+                and isinstance(email.inhalt, str)
+                and email.inhalt.strip()
+            ):
                 return True
 
     return False
 
 
 def email_speichern(email):
-
     if email_validieren(email):
         emails.append(email)
         print("E-Mail erfolgreich gespeichert.")
@@ -63,37 +58,57 @@ def email_speichern(email):
         print(f"Im Postfach sind: {len(emails)} E-Mails")
 
 
-# Neue E-Mail erstellen
-deine_email_adr = input("Deine E-Mail: ").strip()
-betreff_eingabe = input("Betreff: ").strip()
-inhalt = input("Inhalt: ").strip()
+def main():
+    print("ProzessPilot gestartet")
 
-print("---------")
+    # Neue E-Mail erstellen
+    deine_email_adr = input("Deine E-Mail: ").strip()
+    betreff_eingabe = input("Betreff: ").strip()
+    inhalt = input("Inhalt: ").strip()
 
-ids = []
+    print("---------")
 
-for vorhandene_email in emails:
-    ids.append(vorhandene_email.id)
+    # Vorhandene IDs sammeln
+    ids = []
 
-neue_id = naechste_id(ids)
+    for vorhandene_email in emails:
+        ids.append(vorhandene_email.id)
 
-email_inhalt = Email(neue_id, deine_email_adr, betreff_eingabe, inhalt)
+    # Nächste ID ermitteln
+    neue_id = naechste_id(ids)
 
-# Eingaben überprüfen und gegebenenfalls korrigieren
-felder_ausfuehlen(email_inhalt)
+    # E-Mail-Objekt erstellen
+    email_inhalt = Email(
+        neue_id,
+        deine_email_adr,
+        betreff_eingabe,
+        inhalt
+    )
 
-# E-Mail speichern
-email_speichern(email_inhalt)
+    # Eingaben überprüfen und korrigieren
+    felder_ausfuehlen(email_inhalt)
 
-print("---------")
-print("Alle IDs:", [email.id for email in emails])
-print("Betreff:", email_inhalt.betreff)
-print("Hinzugefügte ID:", email_inhalt.id)
+    # E-Mail speichern
+    email_speichern(email_inhalt)
 
-print("---------")
-print("Neue E-Mail gültig:", email_validieren(email_inhalt))
-print("Anzahl E-Mails:", len(emails))
-if len(emails) == 3:
-    print("Dritte E-Mail gültig:", email_validieren(emails[2]))
-else:
-    print("Dritte E-Mail gibt's nicht")
+    # Ergebnisse ausgeben
+    print("---------")
+    print("Alle IDs:", [email.id for email in emails])
+    print("Betreff:", email_inhalt.betreff)
+    print("Hinzugefügte ID:", email_inhalt.id)
+
+    print("---------")
+    print("Neue E-Mail gültig:", email_validieren(email_inhalt))
+    print("Anzahl E-Mails:", len(emails))
+
+    if len(emails) >= 3:
+        print(
+            "Dritte E-Mail gültig:",
+            email_validieren(emails[2])
+        )
+    else:
+        print("Dritte E-Mail gibt's nicht")
+
+
+if __name__ == "__main__":
+    main()
